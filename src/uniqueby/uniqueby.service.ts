@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import uniqBy from 'lodash/unionBy';
 
 @Injectable()
 export class UniquebyService {
@@ -13,5 +14,9 @@ export class UniquebyService {
       seen.add(keyValue);
       return true;
     });
+  }
+
+  uniqueByLodash<T, K extends keyof T>(array: T[], key: K) {
+    return uniqBy(array, key);
   }
 }
