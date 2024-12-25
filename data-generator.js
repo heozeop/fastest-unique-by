@@ -1,6 +1,6 @@
-import fs from 'fs';
-import { faker } from '@faker-js/faker';
-import { Readable } from 'stream';
+const fs = require('fs');
+const { faker } = require('@faker-js/faker');
+const { Readable } = require('stream');
 
 const total = 1_000_000;
 const fileName = 'data.json';
