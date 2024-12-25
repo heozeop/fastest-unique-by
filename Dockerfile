@@ -35,4 +35,4 @@ COPY --from=builder /usr/src/app/data.json ./data.json
 EXPOSE 3000
 
 # 실행 명령
-CMD ["node", "dist/main"]
+CMD ["node", "--max-old-space-size=2048", "dist/main"]

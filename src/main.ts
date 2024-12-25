@@ -7,6 +7,7 @@ async function bootstrap() {
 
   // Express 기반일 때
   const server = app.getHttpServer();
+  server.setTimeout(0);
   // Express의 최상위 라우터 객체
   const router = server._events.request._router;
 
