@@ -1,29 +1,42 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, OnModuleInit } from '@nestjs/common';
 import { UniquebyService } from './uniqueby.service';
-import data from '../../data.json';
 import { Data } from 'src/type/data.type';
+import { readFileWithStream } from 'src/utils/readByStream';
+import { checkExecutionTime } from 'src/utils/checkExecutionTime';
 
 @Controller('uniqueby')
-export class UniquebyController {
+export class UniquebyController implements OnModuleInit {
+  private data: Data[];
   constructor(private readonly uniquebyService: UniquebyService) {}
 
-  @Get('set')
-  uniqueBySet() {
-    return this.uniquebyService.uniqueBySet(data as Data[], 'key');
+  async onModuleInit() {
+    this.data = (await readFileWithStream('data.json')) as Data[];
   }
 
+  @Get('set')
+  async uniqueBySet() {
+    return checkExecutionTime(() =>
+      this.uniquebyService.uniqueBySet(this.data, 'key'),
+    );
+  }
   @Get('lodash')
-  uniqueByLodash() {
-    return this.uniquebyService.uniqueByLodash(data as Data[], 'key');
+  async uniqueByLodash() {
+    return checkExecutionTime(() =>
+      this.uniquebyService.uniqueByLodash(this.data, 'key'),
+    );
   }
 
   @Get('immutable')
-  uniqueByImmutable() {
-    return this.uniquebyService.uniqueByImmutableSet(data as Data[], 'key');
+  async uniqueByImmutable() {
+    return checkExecutionTime(() =>
+      this.uniquebyService.uniqueByImmutableSet(this.data, 'key'),
+    );
   }
 
   @Get('map')
-  uniqueByMap() {
-    return this.uniquebyService.uniqueByMap(data as Data[], 'key');
+  async uniqueByMap() {
+    return checkExecutionTime(() =>
+      this.uniquebyService.uniqueByMap(this.data, 'key'),
+    );
   }
 }

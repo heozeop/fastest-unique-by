@@ -1,7 +1,7 @@
 # --------------------------
 # 1) 빌드 스테이지
 # --------------------------
-FROM node:22-alpine3.21 AS builder
+FROM node:22-alpine3.20 AS builder
 
 # pnpm 설치
 RUN npm i -g pnpm
@@ -21,7 +21,7 @@ RUN pnpm run build
 # --------------------------
 # 2) 런타임 스테이지
 # --------------------------
-FROM node:22-alpine3.21 AS runner
+FROM node:22-alpine3.20 AS runner
 
 WORKDIR /usr/src/app
 
@@ -29,6 +29,7 @@ WORKDIR /usr/src/app
 # node_modules 폴더를 복사(프로덕션 환경에서 필요 패키지만 쓰고 싶다면 따로 분리 가능)
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/data.json ./data.json
 
 # NestJS는 기본적으로 3000 포트를 사용
 EXPOSE 3000
